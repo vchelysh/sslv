@@ -100,8 +100,8 @@ class FirestoreSeenStore(SeenStore):
 
 class TelegramNotifier:
     def __init__(self) -> None:
-        self.token = os.getenv("TELEGRAM_BOT_TOKEN")
-        self.chat_id = os.getenv("TELEGRAM_CHAT_ID")
+        self.token = (os.getenv("TELEGRAM_BOT_TOKEN") or "").strip()
+        self.chat_id = (os.getenv("TELEGRAM_CHAT_ID") or "").strip()
 
     @property
     def enabled(self) -> bool:
