@@ -33,6 +33,8 @@ gcloud iam service-accounts create "$SCHEDULER_SA" \
 gcloud run deploy "$SERVICE" \
   --source . \
   --region "$REGION" \
+  --min 0 \
+  --max 1 \
   --no-allow-unauthenticated \
   --set-env-vars="CONFIG_PATH=config.yaml,STORAGE_BACKEND=firestore" \
   --set-secrets="TELEGRAM_BOT_TOKEN=sslv-telegram-bot-token:latest,TELEGRAM_CHAT_ID=sslv-telegram-chat-id:latest"
