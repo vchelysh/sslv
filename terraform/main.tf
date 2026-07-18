@@ -32,6 +32,10 @@ data "google_secret_manager_secret" "telegram_chat_id" {
   secret_id = var.telegram_chat_id_secret
 }
 
+data "google_project" "current" {
+  project_id = var.project_id
+}
+
 resource "google_cloud_run_v2_service" "watcher" {
   name     = var.service_name
   location = var.region
@@ -80,6 +84,24 @@ resource "google_cloud_run_v2_service_iam_member" "scheduler_invoker" {
   location = var.region
   role     = "roles/run.invoker"
   member   = "serviceAccount:${google_service_account.scheduler.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "runtime_token_accessor" {
+  secret_id = data.google_secret_manager_secret.telegram_token.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${data.google_project.current.number}-compute@developer.gserviceaccount.com"
+}
+
+resource "google_secret_manager_secret_iam_member" "runtime_chat_id_accessor" {
+  secret_id = data.google_secret_manager_secret.telegram_chat_id.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${data.google_project.current.number}-compute@developer.gserviceaccount.com"
+}
+
+resource "google_service_account_iam_member" "scheduler_token_creator" {
+  service_account_id = "projects/${var.project_id}/serviceAccounts/${google_service_account.scheduler.email}"
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:service-${data.google_project.current.number}@gcp-sa-cloudscheduler.iam.gserviceaccount.com"
 }
 
 resource "google_cloud_scheduler_job" "watcher" {
