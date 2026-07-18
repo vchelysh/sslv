@@ -1,0 +1,39 @@
+settings:
+  request_timeout_seconds: 20
+  delay_between_detail_requests_seconds: 1.5
+  max_items_per_feed: 20
+  first_run_send_existing: true
+  user_agent: "SSLV-Watcher/1.0 personal-use"
+  storage_backend: "memory"
+
+searches:
+  - name: "4-room apartment up to 1200 EUR"
+    type: "apartment"
+    status: enabled
+    enabled: true
+    rss_url: "https://www.ss.lv/ru/real-estate/flats/riga/centre/hand_over/rss/"
+    filters:
+      price_eur:
+        max: 1200
+      rooms:
+        min: 4
+        max: 4
+
+  - name: "Audi test"
+    type: "car"
+    status: disabled
+    enabled: false
+    rss_url: "https://www.ss.lv/lv/transport/cars/audi/rss/"
+    filters:
+      price_eur:
+        min: 3000
+        max: 20000
+      year:
+        min: 2010
+      include_any:
+        - "A4"
+        - "A3"
+      exclude_any:
+        - "pērku"
+        - "куплю"
+        - "rezerves daļ"

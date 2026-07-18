@@ -1,0 +1,68 @@
+settings:
+  request_timeout_seconds: 20
+  delay_between_detail_requests_seconds: 1.5
+  max_items_per_feed: 40
+  first_run_send_existing: false
+  user_agent: "SSLV-Watcher/1.0 personal-use contact=replace-with-your-email"
+  storage_backend: "firestore"  # firestore | memory
+  firestore_collection: "sslv_watcher_seen"
+
+searches:
+  - name: "Riga apartment rental"
+    type: "apartment"
+    enabled: true
+    rss_url: "https://www.ss.lv/lv/real-estate/flats/riga/hand_over/rss/"
+    filters:
+      price_eur:
+        min: 300
+        max: 850
+      rooms:
+        min: 2
+        max: 3
+      area_m2:
+        min: 45
+      include_any:
+        - "Centrs"
+        - "Āgenskalns"
+        - "Teika"
+        - "Skanste"
+      exclude_any:
+        - "hostelis"
+        - "istaba"
+        - "diennakti"
+        - "посут"
+      required_all: []
+      detail_attributes: {}
+      # Example:
+      # detail_attributes:
+      #   "Istabas":
+      #     min: 2
+      #     max: 3
+
+  - name: "Audi A4 or A3"
+    type: "car"
+    enabled: true
+    rss_url: "https://www.ss.lv/lv/transport/cars/audi/rss/"
+    filters:
+      price_eur:
+        min: 5000
+        max: 13000
+      year:
+        min: 2014
+      mileage_km:
+        max: 220000
+      include_any:
+        - "A4"
+        - "A3"
+      exclude_any:
+        - "pērku"
+        - "куплю"
+        - "rezerves daļ"
+        - "на запчаст"
+      required_all: []
+      detail_attributes:
+        # Exact labels vary by language/category; matching is case-insensitive.
+        # "Ātr.kārba":
+        #   contains_any: ["Automāts"]
+        # "Dzinējs":
+        #   contains_any: ["Benzīns", "Dīzelis"]
